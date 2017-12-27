@@ -1,0 +1,55 @@
+ {% extends 'base.html' %} {% block style %}
+<script>
+</script>
+<style>
+
+</style>
+{% endblock style %} {% block main %}
+<div class="widget widget-content">
+    <div>
+        {% for item in menu_list %}
+        <div class="">
+            {% if item.menu_level == "P" %}
+            <a data-toggle="collapse" data-target="#{{ item.id }}" href="#">
+                <h3>{{ item.name }}</h3>
+            </a>
+            {% if item.catalog_set.count == 0 %}
+            <div id="{{ item.id }}" class="collapse" role="menu" aria-labelledby="dLabel">
+                {% for post_item in item.post_set.all %}
+                <a href="{{ post_item.get_absolute_url }}">{{ post_item.title }}</a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div id="{{ item.id }}" class="collapse" role="menu" aria-labelledby="dLabel">
+                {% for second_item in item.catalog_set.all %}
+                <li>
+                    <h5>{{ second_item.name }}</h5>
+                    {% if second_item.catalog_set.count == 0 %} {% for post_item in second_item.post_set.all %}
+                    <ul>
+                        <li>
+                            <a href="{{ post_item.get_absolute_url }}">{{ post_item.title }}</a>
+                        </li>
+                    </ul>
+                    {% endfor %} {% else %} {% for three_item in second_item.catalog_set.all %}
+                    <ul>
+                        <li>
+                            <h5>{{ three_item.name }}</h5>
+                            {% for post_item in three_item.post_set.all %}
+                            <ul>
+                                <li>
+                                    <a href="{{ post_item.get_absolute_url }}">{{ post_item.title }}</a>
+                                </li>
+                            </ul>
+                            {% endfor %}
+                        </li>
+                    </ul>
+                    {% endfor %} {% endif %}
+                </li>
+                {% endfor %}
+            </div>
+            {% endif %} {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock main %}
